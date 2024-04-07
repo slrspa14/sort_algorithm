@@ -6,6 +6,10 @@ using System.Threading;
 using System;
 using System.Diagnostics;//스톱워치용
 using System.Text;
+using System.Linq;
+using System.Windows.Shapes;
+using System.Windows.Media;
+using System.Windows.Controls;
 
 namespace sort_project
 {
@@ -16,22 +20,43 @@ namespace sort_project
         public MainWindow()
         {
             InitializeComponent();
-            rand_data = new int[100];
-            Random data = new Random();
-            for(int i =0; i< 100; i++)
-            {
-                rand_data[i] = data.Next(0,1000);
-            }
-            
+            Sort_data();
         }
-        private void Print()
+
+        private void Sort_data()
         {
+            Random data = new Random();
+            rand_data = new int[100];
             for (int i = 0; i < 100; i++)
             {
-                Console.Write(rand_data[i] + ", ");
+                rand_data[i] = data.Next(0, 1000);
             }
-            Console.WriteLine();
         }
+
+        private void Draw_sort()
+        {
+            bubble.Children.Clear();//canvas 초기화
+
+            double barWidth = bubble.ActualWidth / rand_data.Length;//막대기 넓이
+            double maxVal = rand_data.Max();//배열요소중에 최대값
+
+            for (int i = 0; i < rand_data.Length; i++)
+            {
+                double barHeight = (rand_data[i] / maxVal) * bubble.ActualHeight;//막대기 높이
+                Rectangle rect = new Rectangle//막대기 생성 및 색 설정
+                {
+                    Width = barWidth - 1,
+                    Height = barHeight,
+                    Fill = Brushes.CadetBlue,
+                    Stroke = Brushes.Black
+                };
+                //시각화
+                Canvas.SetLeft(rect, i * barWidth);
+                Canvas.SetBottom(rect, 0);
+                bubble.Children.Add(rect);
+            }
+        }
+
         private void Start_Click(object sender, RoutedEventArgs e)
         {
             //4개 묶기
@@ -59,11 +84,14 @@ namespace sort_project
                             int temp = rand_data[j];
                             rand_data[j] = rand_data[j + 1];
                             rand_data[j + 1] = temp;
+
+                            // 시각화 업데이트
+                            Draw_sort();
+                            await Task.Delay(10);//딜레이 없으면 전부 수행 후 멈췄다가 바로 나옴
+
                         }
                     }
                 }
-                Print();
-
                 //끝나면
                 time.Stop();
                 Time_rank("Bubble", time);
@@ -72,8 +100,6 @@ namespace sort_project
             {
                 MessageBox.Show($"버블정렬 오류: {ex}");
             }
-            
-
         }
         private async void Heap_sort()// 끝나면 종료시간 표시하기
         {
