@@ -1,0 +1,36 @@
+﻿<Window x:Class="sort_project.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:sort_project"
+        mc:Ignorable="d"
+        Title="SORT" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="70"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Button x:Name="start" Grid.Column="1" Grid.Row="2" Content="START" Margin="0,10,0,10" Width="80"
+                TextElement.FontSize="14" TextBlock.FontWeight="Bold" Click="Start_Click"/>
+        <Canvas x:Name="bubble" Grid.Column="0" Grid.Row="0"/>
+        <Canvas x:Name="merge" Grid.Column="1" Grid.Row="0"/>
+        <Canvas x:Name="quick" Grid.Column="0" Grid.Row="1"/>
+        <Canvas x:Name="heap" Grid.Column="1" Grid.Row="1"/>
+        <Label Content="Time Record" Grid.Column="0" Grid.Row="2" TextBlock.FontSize="14" TextBlock.FontWeight="Bold"/>
+        <TextBox x:Name="record" Text="" Grid.Column="0" Grid.Row="2"/>
+        <Label Content="Bubble Sort" Grid.Column="0" Grid.Row="0" Margin="10,10,280,130"
+               TextBlock.FontSize="14" TextBlock.FontWeight="Bold"/>
+        <Label Content="Merge Sort" Grid.Column="1" Grid.Row="0" Margin="10,10,280,130"
+               TextBlock.FontSize="14" TextBlock.FontWeight="Bold"/>
+        <Label Content="Quick Sort" Grid.Column="0" Grid.Row="1" Margin="10,10,280,130"
+               TextBlock.FontSize="14" TextBlock.FontWeight="Bold"/>
+        <Label Content="Heap Sort" Grid.Column="1" Grid.Row="1" Margin="10,10,280,130"
+               TextBlock.FontSize="14" TextBlock.FontWeight="Bold"/>
+    </Grid>
+</Window>
