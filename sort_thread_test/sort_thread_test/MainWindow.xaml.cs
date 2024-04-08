@@ -183,10 +183,50 @@ namespace sort_thread_test
         {
             Stopwatch time = new Stopwatch();
             time.Start();
-
+            // 최대 힙 초기화
+            for (int i = test.Length / 2 - 1; i >= 0; i--)
+            {
+                heapify(test, test.Length, i);
+            }
+            for (int i = test.Length - 1; i > 0; i--)
+            {
+                swap(test, 0, i);
+                heapify(test, i, 0);
+                Dispatcher.Invoke(Draw_sort);
+                Thread.Sleep(sleep);
+            }
 
             time.Stop();
             Sort_record("Heap", time);
+        }
+        static void heapify(int[] array, int arrayLength, int i)
+        {
+            int parent = i;
+            int left = i * 2 + 1;
+            int right = i * 2 + 2;
+            // 왼쪽 자식노드
+            if (left < arrayLength && array[parent] < array[left])
+            {
+                parent = left;
+            }
+            // 오른쪽 자식노드
+            if (right < arrayLength && array[parent] < array[right])
+            {
+                parent = right;
+            }
+            // 부모노드 < 자식노드
+            if (i != parent)
+            {
+                swap(array, parent, i);
+                heapify(array, arrayLength, parent);
+            }
+        }
+        static void swap(int[] array, int a, int b)
+        {
+            int temp;
+            temp = array[a];
+            array[a] = array[b];
+            array[b] = temp;
         }
         void Quick_start()
         {
