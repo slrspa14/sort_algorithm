@@ -23,7 +23,6 @@
         <Canvas x:Name="quick" Grid.Column="0" Grid.Row="1" Background="Gray"/>
         <Canvas x:Name="heap" Grid.Column="1" Grid.Row="1" Background="Gray"/>
         <TextBox x:Name="record" Text="" Grid.Column="0" Grid.Row="2"/>
-        <Label Content="Time Record" Grid.Column="0" Grid.Row="2" TextBlock.FontSize="14" TextBlock.FontWeight="Bold"/>
         <Label Content="Bubble Sort" Grid.Column="0" Grid.Row="0" Margin="10,10,280,130"
                TextBlock.FontSize="14" TextBlock.FontWeight="Bold"/>
         <Label Content="Merge Sort" Grid.Column="1" Grid.Row="0" Margin="10,10,280,130"
