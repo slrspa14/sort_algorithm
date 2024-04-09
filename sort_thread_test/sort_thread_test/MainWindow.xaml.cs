@@ -22,7 +22,7 @@ namespace sort_thread_test
         void Rand_data()
         {
             Random data = new Random();
-            sort_data = new int[100];
+            sort_data = new int[500];
             for(int i=0; i< sort_data.Length; i++)
             {
                 sort_data[i] = data.Next(0, 1000);
@@ -139,7 +139,7 @@ namespace sort_thread_test
         }
         void Merge(int[] arr, int left, int mid, int right)
         {
-            int[] sorted = new int[100];
+            int[] sorted = new int[500];
             int i, j, k = left;
             for (i = left, j = mid + 1; i <= mid && j <= right;)
             {
@@ -161,22 +161,29 @@ namespace sort_thread_test
         }
         private void Heap_sort()
         {
-            Stopwatch time = new Stopwatch();
-            time.Start();
-            // 최대 힙 초기화
-            for (int i = sort_data.Length / 2 - 1; i >= 0; i--)
+            try
             {
-                heapify(sort_data, sort_data.Length, i);
+                Stopwatch time = new Stopwatch();
+                time.Start();
+                // 최대 힙 초기화
+                for (int i = sort_data.Length / 2 - 1; i >= 0; i--)
+                {
+                    heapify(sort_data, sort_data.Length, i);
+                }
+                for (int i = sort_data.Length - 1; i > 0; i--)
+                {
+                    swap(sort_data, 0, i);
+                    heapify(sort_data, i, 0);
+                    Dispatcher.Invoke(Draw_sort);
+                    Thread.Sleep(sleep);
+                }
+                time.Stop();
+                Sort_record("Heap", time);
             }
-            for (int i = sort_data.Length - 1; i > 0; i--)
+            catch(Exception ex)
             {
-                swap(sort_data, 0, i);
-                heapify(sort_data, i, 0);
-                Dispatcher.Invoke(Draw_sort);
-                Thread.Sleep(sleep);
+                MessageBox.Show($"힙 정렬 오류: {ex}");
             }
-            time.Stop();
-            Sort_record("Heap", time);
         }
         static void heapify(int[] array, int arrayLength, int i)
         {
