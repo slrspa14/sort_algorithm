@@ -12,9 +12,9 @@ namespace sort_thread_test
 {
     public partial class MainWindow : Window
     {
-        int[] test;
+        int[] sort_data;
         int rank = 1;
-        int sleep = 10;
+        int sleep = 30;
         public MainWindow()
         {
             InitializeComponent();
@@ -22,10 +22,10 @@ namespace sort_thread_test
         void Rand_data()
         {
             Random data = new Random();
-            test = new int[100];
-            for(int i=0; i<test.Length; i++)
+            sort_data = new int[100];
+            for(int i=0; i< sort_data.Length; i++)
             {
-                test[i] = data.Next(0, 1000);
+                sort_data[i] = data.Next(0, 1000);
             }
         }
 
@@ -33,40 +33,17 @@ namespace sort_thread_test
         {
             sort.Children.Clear();//canvas 초기화
 
-            double barWidth = sort.ActualWidth / test.Length;//막대기 넓이
-            double maxVal = test.Max();//배열요소중에 최대값
+            double barWidth = sort.ActualWidth / sort_data.Length;//막대기 넓이
+            double maxVal = sort_data.Max();//배열요소중에 최대값
 
-            for (int i = 0; i < test.Length; i++)
+            for (int i = 0; i < sort_data.Length; i++)
             {
-                double barHeight = (test[i] / maxVal) * sort.ActualHeight;//막대기 높이
+                double barHeight = (sort_data[i] / maxVal) * sort.ActualHeight;//막대기 높이
                 Rectangle rect = new Rectangle//막대기 생성 및 색 설정
                 {
                     Width = barWidth - 1,
                     Height = barHeight,
-                    Fill = Brushes.Blue,
-                    Stroke = Brushes.Black
-                };
-                //시각화
-                Canvas.SetLeft(rect, i * barWidth);
-                Canvas.SetBottom(rect, 0);
-                sort.Children.Add(rect);
-            }
-        }
-        private void Draw_sort1()
-        {
-            sort.Children.Clear();//canvas 초기화
-
-            double barWidth = sort.ActualWidth / test.Length;//막대기 넓이
-            double maxVal = test.Max();//배열요소중에 최대값
-
-            for (int i = 0; i < test.Length; i++)
-            {
-                double barHeight = (test[i] / maxVal) * sort.ActualHeight;//막대기 높이
-                Rectangle rect = new Rectangle//막대기 생성 및 색 설정
-                {
-                    Width = barWidth - 1,
-                    Height = barHeight,
-                    Fill = Brushes.Blue,
+                    Fill = Brushes.SteelBlue,
                     Stroke = Brushes.Black
                 };
                 //시각화
@@ -83,18 +60,22 @@ namespace sort_thread_test
             {
                 case 0:
                     Thread bubble = new Thread(Bubble_sort);
+                    sort_name.Content = "Bubble Sort";
                     bubble.Start();
                     break;
                 case 1:
                     Thread merge = new Thread(Merge_start);
+                    sort_name.Content = "Merge Sort";
                     merge.Start();
                     break;
                 case 2:
                     Thread heap = new Thread(Heap_sort);
+                    sort_name.Content = "Heap Sort";
                     heap.Start();
                     break;
                 case 3:
                     Thread quick = new Thread(Quick_start);
+                    sort_name.Content = "Quick Sort";
                     quick.Start();
                     break;
             }
@@ -105,15 +86,15 @@ namespace sort_thread_test
             {
                 Stopwatch time = new Stopwatch();
                 time.Start();
-                for (int i = 0; i < test.Length; i++)
+                for (int i = 0; i < sort_data.Length; i++)
                 {
-                    for (int j = 0; j < test.Length - i - 1; j++)
+                    for (int j = 0; j < sort_data.Length - i - 1; j++)
                     {
-                        if (test[j] > test[j + 1])
+                        if (sort_data[j] > sort_data[j + 1])
                         {
-                            int temp = test[j];
-                            test[j] = test[j + 1];
-                            test[j + 1] = temp;
+                            int temp = sort_data[j];
+                            sort_data[j] = sort_data[j + 1];
+                            sort_data[j + 1] = temp;
                             Dispatcher.Invoke(new Action(Draw_sort));
                             Thread.Sleep(sleep);
                         }
@@ -131,7 +112,7 @@ namespace sort_thread_test
         }
         private void Merge_start()
         {
-            Merge_sort(test, 0, test.Length-1);
+            Merge_sort(sort_data, 0, sort_data.Length-1);
         }
         private void Merge_sort(int[] arr, int left, int right)
         {
@@ -144,8 +125,8 @@ namespace sort_thread_test
                     int mid = (left + right) / 2;
                     Merge_sort(arr, left, mid);
                     Merge_sort(arr, mid + 1, right);
-                    Merge(arr, left, mid, right);
-                    Dispatcher.Invoke(Draw_sort1);
+                    Merge(arr, left, mid, right);//
+                    Dispatcher.Invoke(Draw_sort);
                     Thread.Sleep(sleep);
                 }
                 time.Stop();
@@ -167,35 +148,33 @@ namespace sort_thread_test
             if (i > mid) // 왼쪽이 끝나고, 오른쪽 나머지를 복사
             {
                 for (int l = j; l <= right; l++)
-                    sorted[k++] = arr[l];
+                    sorted[k++] = arr[l];//
             }
             else // 오른쪽이 끝나서, 왼쪽의 나머지를 복사
             {
                 for (int l = i; l <= mid; l++)
                     sorted[k++] = arr[l];
             }
-
             // 정렬된 sorted[]을 rand_data[]로 복사
             for (int l = left; l <= right; l++)
-                test[l] = sorted[l];
+                sort_data[l] = sorted[l];
         }
         private void Heap_sort()
         {
             Stopwatch time = new Stopwatch();
             time.Start();
             // 최대 힙 초기화
-            for (int i = test.Length / 2 - 1; i >= 0; i--)
+            for (int i = sort_data.Length / 2 - 1; i >= 0; i--)
             {
-                heapify(test, test.Length, i);
+                heapify(sort_data, sort_data.Length, i);
             }
-            for (int i = test.Length - 1; i > 0; i--)
+            for (int i = sort_data.Length - 1; i > 0; i--)
             {
-                swap(test, 0, i);
-                heapify(test, i, 0);
+                swap(sort_data, 0, i);
+                heapify(sort_data, i, 0);
                 Dispatcher.Invoke(Draw_sort);
                 Thread.Sleep(sleep);
             }
-
             time.Stop();
             Sort_record("Heap", time);
         }
@@ -230,7 +209,7 @@ namespace sort_thread_test
         }
         void Quick_start()
         {
-            Quick_sort(test, 0, test.Length - 1);
+            Quick_sort(sort_data, 0, sort_data.Length - 1);
         }
         private void Quick_sort(int[] arr, int left, int right)
         {
@@ -244,7 +223,7 @@ namespace sort_thread_test
                     Quick_sort(arr, left, q - 1);
                     Quick_sort(arr, q + 1, right);
                     Dispatcher.Invoke(Draw_sort);
-                    Thread.Sleep(50);
+                    Thread.Sleep(sleep);
                 }
                 time.Stop();
                 Sort_record("Quick", time);
