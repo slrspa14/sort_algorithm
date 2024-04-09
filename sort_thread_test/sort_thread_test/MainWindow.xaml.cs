@@ -14,7 +14,7 @@ namespace sort_thread_test
     {
         int[] sort_data;
         int rank = 1;
-        int sleep = 30;
+        int sleep = 10;
         public MainWindow()
         {
             InitializeComponent();
@@ -22,7 +22,7 @@ namespace sort_thread_test
         void Rand_data()
         {
             Random data = new Random();
-            sort_data = new int[500];
+            sort_data = new int[250];
             for(int i=0; i< sort_data.Length; i++)
             {
                 sort_data[i] = data.Next(0, 1000);
@@ -112,14 +112,16 @@ namespace sort_thread_test
         }
         private void Merge_start()
         {
+            Stopwatch time = new Stopwatch();
+            time.Start();
             Merge_sort(sort_data, 0, sort_data.Length-1);
+            time.Stop();
+            Sort_record("Merge", time);
         }
         private void Merge_sort(int[] arr, int left, int right)
         {
             try
             {
-                Stopwatch time = new Stopwatch();
-                time.Start();
                 if (left < right)
                 {
                     int mid = (left + right) / 2;
@@ -129,8 +131,6 @@ namespace sort_thread_test
                     Dispatcher.Invoke(Draw_sort);
                     Thread.Sleep(sleep);
                 }
-                time.Stop();
-                Sort_record("Merge", time);
             }
             catch(Exception ex)
             {
@@ -139,7 +139,7 @@ namespace sort_thread_test
         }
         void Merge(int[] arr, int left, int mid, int right)
         {
-            int[] sorted = new int[500];
+            int[] sorted = new int[250];
             int i, j, k = left;
             for (i = left, j = mid + 1; i <= mid && j <= right;)
             {
@@ -216,14 +216,16 @@ namespace sort_thread_test
         }
         void Quick_start()
         {
+            Stopwatch time = new Stopwatch();
+            time.Start();
             Quick_sort(sort_data, 0, sort_data.Length - 1);
+            time.Stop();
+            Sort_record("Quick", time);
         }
         private void Quick_sort(int[] arr, int left, int right)
         {
             try
             {
-                Stopwatch time = new Stopwatch();
-                time.Start();
                 if (left < right)
                 {
                     int q = Partition(arr, left, right);
@@ -232,8 +234,6 @@ namespace sort_thread_test
                     Dispatcher.Invoke(Draw_sort);
                     Thread.Sleep(sleep);
                 }
-                time.Stop();
-                Sort_record("Quick", time);
             }
             catch(Exception ex)
             {
