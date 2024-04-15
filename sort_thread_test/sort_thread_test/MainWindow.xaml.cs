@@ -53,7 +53,30 @@ namespace sort_thread_test
                 sort.Children.Add(rect);
             }
         }
-        
+        private void End_sort()
+        {
+            sort.Children.Clear();//canvas 초기화
+
+            double barWidth = sort.ActualWidth / sort_data.Length;//막대기 넓이
+            double maxVal = sort_data.Max();//배열요소중에 최대값
+
+            for (int i = 0 ; i < sort_data.Length; i++)
+            {
+                double barHeight = (sort_data[i] / maxVal) * sort.ActualHeight;//막대기 높이
+                Rectangle rect = new Rectangle//막대기 생성 및 색 설정
+                {
+                    Width = barWidth - 1,
+                    Height = barHeight,
+                    Fill = Brushes.Green,
+                    Stroke = Brushes.White
+                };
+                //시각화
+                Canvas.SetLeft(rect, i * barWidth);
+                Canvas.SetBottom(rect, 0);
+                sort.Children.Add(rect);
+            }
+        }
+
         private void Start_Click(object sender, RoutedEventArgs e)
         {
             Rand_data();
@@ -181,7 +204,7 @@ namespace sort_thread_test
             for (int l = left; l <= right; l++)
                 sort_data[l] = sorted[l];
         }
-        private void Heap_sort()//async
+        private void Heap_sort()
         {
             try
             {
